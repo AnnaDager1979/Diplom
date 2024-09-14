@@ -4,7 +4,6 @@ from django.contrib.admin import SimpleListFilter
 from mptt.admin import MPTTModelAdmin
 from django_mptt_admin.admin import DjangoMpttAdmin
 
-
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
     list_display = ('pk', 'title', 'author','year', 'pages', 'theme', 'status', 'controler')
