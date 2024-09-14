@@ -1,0 +1,28 @@
+<!-- Краткое представление карточки книги -->
+<div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-8">
+      <div class="card-body">
+        <h4 class="card-title">{{ book.title }}</h4>
+        <h5 class="card-title">Автор: {{ book.author }}</h5>
+        <h6 class="card-title">Серия: {{ book.seria }}</h6>
+        <p class="card-text">
+          Теги:
+            {% for tag in book.tags.all %}
+             <span class="badge bg-secondary">
+              <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
+             </span>
+            {% endfor %}
+        </p>
+        <img src="{{book.images_path.url}}" width="100px">
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <div>
+            <i class="bi bi-star-fill"></i> {{ book.year }}
+            <!-- Кнопка детального представления -->
+            <a href="{{ book.get_absolute_url }}" class="btn btn-dark btn-sm" role="button">Подробнее</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

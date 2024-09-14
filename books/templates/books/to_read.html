@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>План по чтению книг на месяц</h1>
+    <p>В этом месяцу я планирую прочесть эти книги:</p>
+	{% for book in books %}
+        {% include "books/includes/book_preview.html" %}
+    {% endfor %}
+{% endblock %}

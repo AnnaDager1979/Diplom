@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="card">
+      <div class="card-header">
+        Детальное представление карточки
+      </div>
+      <div class="card-body">
+        <h4 class="card-title">{{ book.title }}</h4>
+        <h5 class="card-title">Автор: {{ book.author }}</h5>
+        <h6 class="card-title">Издательство: {{ book.editor }}</h6>
+        <h6 class="card-title">Год издания: {{ book.year }}</h6>
+        <h6 class="card-title">Тип книги: {{ book.type}}</h6>
+        <h6 class="card-title">Обложка: {{ book.cover }}</h6>
+        <h6 class="card-title">Количество страниц: {{ book.pages }}</h6>
+        <h6 class="card-title">Формат книги: {{ book.format }}</h6>
+        <h6 class="card-title">Серия: {{ book.seria }}</h6>
+        <h6 class="card-title">Тематика: {{ book.theme }}</h6>
+        <img src="{{book.images_path.url}}" width="200px">
+        <p class="card-text">
+          Теги:
+          {% for tag in book.tags.all %}
+            <span class="badge bg-secondary">
+              <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
+            </span>
+          {% endfor %}
+        </p>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <a href="{% url 'catalog' %}" class="btn btn-dark">Вернуться к каталогу</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

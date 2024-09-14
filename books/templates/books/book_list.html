@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% block title %}Книги по выбранной теме: "{{title}}"{% endblock %}
+{% block content %}
+<main>
+	<section>
+	<div class="container">
+	    <h1>Книги по выбранной теме: "{{title}}"</h1>
+	</div>
+    </section>
+    <div>
+		<div>
+			<ol>
+					{{theme_list}}
+					{% for book in object_list%}
+					<li style="font-size:16px; font-weight: normal">
+						<div style="overflow: hidden;">
+							<div style="float: left; width: 380px; height: 35px; ">{{book}}</div>
+							<div style="float: left; width: 50px; height: 45px; ">
+								<img src="{{book.images_path.url}}" width="35px" height="45px">
+							</div>
+							<div>
+								<a href="{{ book.get_absolute_url }}" class="btn btn-info btn-sm" role="button">Информация о книге</a>
+							</div>
+						</div>
+						<hr>
+					</li>
+		 			{% endfor %}
+				</ol>
+		</div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center mt-3">
+          <a href="{% url 'category_list' %}" class="btn btn-dark">Перейти на главный тематический рубрикатор</a>
+    </div>
+</main>
+{% endblock %}-

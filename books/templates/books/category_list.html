@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% block content %}
+<h1>Поиск книг по тематике</h1>
+<div>
+    <div>
+	<ul>
+	{% recursetree object_list %}
+	    <li>
+		<a href="{{node.get_absolute_url}}">{{node.title}}</a>
+		{% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+				</ul>
+		{% endif %}
+	    </li>
+	{% endrecursetree %}
+	</ul>
+    </div>
+</div>
+{% endblock %}
