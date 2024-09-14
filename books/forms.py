@@ -82,7 +82,8 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book  # модель с которой работаем форма
-        fields = ['title', 'author', 'tags']  # поля, которые будут в форме и их порядок
+        #fields = ['title', 'author', 'tags']  # поля, которые будут в форме и их порядок
+        fields = '__all__'
 
         # Виджеты для полей
         widgets =  {
