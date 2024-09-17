@@ -12,5 +12,9 @@ urlpatterns = [
     path('<int:pk>/delete/', views.DeleteBookView.as_view(), name='delete_book'),
     path('series/', views.SeriaView.as_view(), name = 'series'),
     path('reader/', views.get_control, name = 'reader'),
+    path('upload_file/', views.add_book_by_file, name='add_book_by_file'),
     path('add/', views.AddBookCreateView.as_view(), name='add_book'),
+    path('add_author/', views.AddAuthorCreateView.as_view(), name='add_author'),
+    path('add_editor/', views.AddEditorCreateView.as_view(), name='add_editor'),
+    path('add_seria/', views.AddSeriaCreateView.as_view(), name='add_seria'),
 ]

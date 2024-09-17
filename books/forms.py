@@ -67,7 +67,7 @@ class BookForm(forms.ModelForm):
         ##validators=[CodeBlockValidator()]
     )
 
-    file_path = forms.ImageField(
+    images_path = forms.ImageField(
         widget=forms.FileInput(attrs={"id": "image_field"}),
         label='Загрузите файл:',
     )
@@ -82,8 +82,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book  # модель с которой работаем форма
-        #fields = ['title', 'author', 'tags']  # поля, которые будут в форме и их порядок
-        fields = '__all__'
+        fields = ['title', 'author', 'editor', 'theme', 'tags','type','cover','format', 'seria','review', 'images_path']  # поля, которые будут в форме и их порядок
 
         # Виджеты для полей
         widgets =  {
@@ -121,6 +120,56 @@ class BookForm(forms.ModelForm):
 
         return instance
 
+
+class AuthorForm(forms.ModelForm):
+
+   sirname = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 40}),
+        label='Фамилия:',
+   )
+
+   name = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 40}),
+        label='Имя:',
+   )
+
+   fathername = forms.CharField(
+       widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 40}),
+       label='Отчество:',
+   )
+
+   class Meta:
+       model = Author  # модель с которой работаем форма
+       fields = ['sirname', 'name', 'fathername']  # поля, которые будут в форме и их порядок
+
+
+class EditorForm(forms.ModelForm):
+
+   name = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 40}),
+        label='Издательство:',
+   )
+
+   city = forms.CharField(
+       widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 40}),
+       label='Город:',
+   )
+
+   class Meta:
+       model = Editor  # модель с которой работаем форма
+       fields = ['name', 'city']  # поля, которые будут в форме и их порядок
+
+
+class SeriaForm(forms.ModelForm):
+
+    seria = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 50}),
+        label='Серия:',
+    )
+
+    class Meta:
+        model = Seria  # модель с которой работаем форма
+        fields = ['seria']
 
 class UploadFileForm(forms.Form):
     # Здесь определяется поле для загрузки файла

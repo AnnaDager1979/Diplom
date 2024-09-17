@@ -9,11 +9,10 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .forms import BookForm,UploadFileForm
+from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
 import os
 from django.core.cache import cache
 from django.urls import reverse_lazy
-
 
 info={
      "menu": [
@@ -253,23 +252,56 @@ def handle_uploaded_file(f):
         return file_path
 
 
+# def add_book_by_file(request):
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#                 # Записываем файл на диск
+#             file_path = handle_uploaded_file(request.FILES['file'])
+#             return redirect('http://127.0.0.1:8000/books/add/')
+#         else:
+#             form = UploadFileForm()
+#     return render(request, 'books/add_book.html', {'form': form})
+
 def add_book_by_file(request):
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
-                # Записываем файл на диск
-            file_path = handle_uploaded_file(request.FILES['file'])
-            return redirect('http://127.0.0.1:8000/books/add/')
-        else:
-            form = UploadFileForm()
-    return render(request, 'books/add_book.html', {'form': form})
+            form.save()
+            return redirect('catalog')
+    else:
+        form = BookForm
+    return render(request, 'books/add_book.html', {'form':form})
+
 
 
 class AddBookCreateView(MenuMixin, CreateView):
     model = Book
     form_class = BookForm
+    extra_context = {'books': Book.objects.all()}
     template_name = 'books/add_book.html'
     success_url = reverse_lazy('catalog')
+    redirect_field_name = 'next'
+
+class AddAuthorCreateView(MenuMixin, CreateView):
+    model = Author
+    form_class = AuthorForm
+    template_name = 'books/add_author.html'
+    success_url = reverse_lazy('add_book')
+    redirect_field_name = 'next'
+
+class AddEditorCreateView(MenuMixin, CreateView):
+    model = Editor
+    form_class = EditorForm
+    template_name = 'books/add_editor.html'
+    success_url = reverse_lazy('add_book')
+    redirect_field_name = 'next'
+
+class AddSeriaCreateView(MenuMixin, CreateView):
+    model = Seria
+    form_class = SeriaForm
+    template_name = 'books/add_seria.html'
+    success_url = reverse_lazy('add_book')
     redirect_field_name = 'next'
 
 class EditBookUpdateView(LoginRequiredMixin, MenuMixin, UpdateView):
@@ -277,10 +309,17 @@ class EditBookUpdateView(LoginRequiredMixin, MenuMixin, UpdateView):
     form_class = BookForm
     template_name = 'books/add_book.html'
     success_url = reverse_lazy('catalog')
-    redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
+    redirect_field_name = 'next'
 
 class DeleteBookView(LoginRequiredMixin, MenuMixin, DeleteView):
     model = Book  # Указываем модель, с которой работает представление
     success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного удаления карточки
     template_name = 'books/delete_book.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
     redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
+
+class UploadFileCreateView(MenuMixin, CreateView):
+    model = Seria
+    form_class = SeriaForm
+    template_name = 'books/add_seria.html'
+    success_url = reverse_lazy('add_book')
+    redirect_field_name = 'next'

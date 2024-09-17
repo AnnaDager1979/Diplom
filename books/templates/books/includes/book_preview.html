@@ -2,10 +2,17 @@
 <div class="card mb-3" style="max-width: 540px;">
   <div class="row g-0">
     <div class="col-md-8">
-      <div class="card-body">
+      {% if book.file_path %}
+      <div class="card-body bg-warning">
+      {% else%}
+      <div class="card-body bg-secondary">
+      {% endif %}
         <h4 class="card-title">{{ book.title }}</h4>
         <h5 class="card-title">Автор: {{ book.author }}</h5>
-        <h6 class="card-title">Серия: {{ book.seria }}</h6>
+        {% if book.file_path %}
+              <i class="bi bi-files"></i> "Электронная книга"
+              <div><a href="{{book.file_path.url}}"> {{ book.title }}</a></div>
+        {% endif %}
         <p class="card-text">
           Теги:
             {% for tag in book.tags.all %}
@@ -14,7 +21,11 @@
              </span>
             {% endfor %}
         </p>
+        {% if book.images_path %}
         <img src="{{book.images_path.url}}" width="100px">
+        {% else %}
+        <p>Обложка отсутствует или не загрузилась</p>
+        {% endif %}
         <div class="d-flex justify-content-between align-items-center mt-2">
           <div>
             <i class="bi bi-star-fill"></i> {{ book.year }}

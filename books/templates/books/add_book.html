@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-
+<a href="http://127.0.0.1:8000/books/add_author/" class="btn btn-dark">+ Автор книги</a>
+<a href="http://127.0.0.1:8000/books/add_editor/" class="btn btn-dark">+ Издательство</a>
+<a href="http://127.0.0.1:8000/books/add_seria/" class="btn btn-dark">+ Серия</a>
+<p></p>
 <h1>Добавить книгу</h1>
 <div class="container-fluid">
     <div class="row">
@@ -23,6 +26,7 @@
                     {% endif %}
                 </div>
                 <p>Ссылка: <a href="{{ file_url }}">{{ file_url }}</a></p>
+                <input type="file" name="myfile1">
                 <button type="submit" class="btn btn-dark">Отправить</button>
             </form>
         <div class="d-flex justify-content-between align-items-center mt-3">
