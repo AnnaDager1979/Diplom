@@ -251,18 +251,6 @@ def handle_uploaded_file(f):
 
         return file_path
 
-
-# def add_book_by_file(request):
-#     if request.method == 'POST':
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#                 # Записываем файл на диск
-#             file_path = handle_uploaded_file(request.FILES['file'])
-#             return redirect('http://127.0.0.1:8000/books/add/')
-#         else:
-#             form = UploadFileForm()
-#     return render(request, 'books/add_book.html', {'form': form})
-
 def add_book_by_file(request):
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
@@ -272,7 +260,6 @@ def add_book_by_file(request):
     else:
         form = BookForm
     return render(request, 'books/add_book.html', {'form':form})
-
 
 
 class AddBookCreateView(MenuMixin, CreateView):

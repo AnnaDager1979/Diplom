@@ -69,7 +69,12 @@ class BookForm(forms.ModelForm):
 
     images_path = forms.ImageField(
         widget=forms.FileInput(attrs={"id": "image_field"}),
-        label='Загрузите файл:',
+        label='Загрузите обложку книги:',
+    )
+
+    file_path = forms.FileField(
+        widget=forms.FileInput(attrs={"id": "image_field"}),
+        label='Загрузите электронный вид книги:',
     )
 
     tags = forms.CharField(
@@ -82,7 +87,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book  # модель с которой работаем форма
-        fields = ['title', 'author', 'editor', 'theme', 'tags','type','cover','format', 'seria','review', 'images_path']  # поля, которые будут в форме и их порядок
+        fields = ['title', 'author', 'editor', 'theme', 'tags','type','cover','format', 'seria','review', 'images_path', 'file_path']  # поля, которые будут в форме и их порядок
 
         # Виджеты для полей
         widgets =  {
