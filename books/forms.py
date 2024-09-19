@@ -30,6 +30,11 @@ class BookForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
     )
 
+    year = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 4}),
+        label='Год издания:',
+    )
+
     theme  = forms.ModelChoiceField(
         queryset=Theme.objects.all(),
         label='Тематика:',
@@ -61,6 +66,28 @@ class BookForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'}),
     )
 
+    tom = forms.CharField(
+        initial=0,
+        label='Том (номер книги):',
+    )
+
+    pages = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 1, 'cols': 4}),
+        label='Количество страниц:',
+    )
+
+    status = forms.BooleanField(
+        required=False,
+        initial=False,
+        label='Прочитано:',
+    )
+
+    controler = forms.BooleanField(
+        required=False,
+        initial=False,
+        label='Прочесть в текущий месяц:',
+    )
+
     review = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 40}),
         label='Рецензия на книгу:',
@@ -73,6 +100,7 @@ class BookForm(forms.ModelForm):
     )
 
     file_path = forms.FileField(
+        required=False,
         widget=forms.FileInput(attrs={"id": "image_field"}),
         label='Загрузите электронный вид книги:',
     )
@@ -87,7 +115,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book  # модель с которой работаем форма
-        fields = ['title', 'author', 'editor', 'theme', 'tags','type','cover','format', 'seria','review', 'images_path', 'file_path']  # поля, которые будут в форме и их порядок
+        fields = ['title', 'author', 'editor', 'year', 'theme', 'tags','type','cover','format', 'seria','tom', 'pages', 'status', 'controler', 'review', 'images_path', 'file_path']  # поля, которые будут в форме и их порядок
 
         # Виджеты для полей
         widgets =  {
