@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from books import views
 from books.views import CategoryListView, BookByCategoryView
 from django.views.decorators.cache import cache_page
-
+from django.conf import settings
 
 admin.site.site_header = 'Управление сайтом МОЯ ДОМАШНЯЯ БИБЛИОТЕКА'
 admin.site.site_title = 'Администрирование сайта МОЯ ДОМАШНЯЯ БИБЛИОТЕКА'
@@ -19,8 +19,16 @@ urlpatterns = [
     path('<str:slug>/', BookByCategoryView.as_view(), name='book-by-category'),
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+        # другие URL-паттерны
+    ] + urlpatterns
+
 
 handler404 = views.PageNotFoundView.as_view()

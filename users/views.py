@@ -14,6 +14,7 @@ from .forms import (
 from books.models import Book
 from books.views import MenuMixin
 
+
 class LoginUser(MenuMixin, LoginView):
     form_class = CustomAuthenticationForm
     template_name = 'users/login.html'
@@ -42,7 +43,7 @@ class RegisterDoneView(MenuMixin, TemplateView):
     extra_context = {'title': 'Регистрация завершена'}
 
 
-class ProfileUser(LoginRequiredMixin, UpdateView):
+class ProfileUser(MenuMixin, LoginRequiredMixin, UpdateView):
     model = get_user_model()
     form_class = ProfileUserForm
     template_name = 'users/profile.html'
@@ -72,7 +73,8 @@ class UserPasswordChangeDone(PasswordChangeView):
 class UserBooksView(ListView):
     model = Book
     template_name = 'users/profile_books.html'
-    extra_context = {'title': 'Мои карточки', 'active_tab': 'profile_books'}
+    extra_context = {'title': 'Мои книги', 'active_tab': 'profile_books'}
 
     def get_queryset(self):
-        return Card.objects.filter(author=self.request.user).order_by('-upload_date')
+        queryset = Book.objects.all()
+        return queryset

@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
-import os.path
+
+from django.conf.global_settings import AUTHENTICATION_BACKENDS, AUTH_USER_MODEL
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1gq!2*wbn$)-3$fw$1q%dh3^i2q)i%$32p74o)sdho#*8)49r&'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,8 +150,21 @@ CACHES = {
 
 LOGIN_URL = 'users:login'
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # стандартный бэкенд для аутентификации по username
     'users.authentication.EmailAuthBackend',  # дополнительный бэкенд для аутентификации по email
 ]
+
+
+AUTH_USER_MODEL = 'users.User'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_SSL = True
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
+SERVER_EMAIL = os.getenv('EMAIL_HOST_USER')
+EMAIL_ADMIN = os.getenv('EMAIL_HOST_USER')
