@@ -3,7 +3,6 @@ from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, For
 from django.core.exceptions import ValidationError
 import re
 
-
 class TagStringValidator:
     def __call__(self, value):
         if ' ' in value:

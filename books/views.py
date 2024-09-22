@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.template.loader import render_to_string
 from django.db.models import F, Q
 from django.shortcuts import render, get_object_or_404, redirect
@@ -9,6 +10,7 @@ from django.views import View
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.forms import BaseModelForm
 from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
 import os
 from django.core.cache import cache
