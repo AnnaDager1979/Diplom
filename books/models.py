@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -28,7 +30,9 @@ class Book(models.Model):
     images_path = models.ImageField(upload_to='books/static/books/images', blank=True)
     file_path = models.FileField(upload_to='books/static/books/e_books', blank=True)
     review = models.CharField(max_length=100, db_column='Рецензия', verbose_name='Рецензия')
+    place = models.ForeignKey('Place', on_delete=models.CASCADE, db_column='PlaceID', null=True, verbose_name='Место хранения')
     tags = models.ManyToManyField('Tag', through='BookTags', related_name='books')
+    #readers = models.ManyToManyField('User', through='Favorite', related_name='books')
 
     class Meta:
         db_table = 'Books'  # имя таблицы в базе данных
@@ -70,6 +74,15 @@ class BookTags(models.Model):
 
     def __str__(self):
         return f'Тег {self.tag.name} к книге {self.book.title}'
+
+
+# class Favorite(models.Model):
+#     id = models.AutoField(primary_key=True, db_column='id')
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='UserID')
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE, db_column='BookID')
+#
+#     class Meta:
+#         unique_together = ('user', 'book')
 
 
 class Author(models.Model):
@@ -169,3 +182,15 @@ class Seria(models.Model):
 
     def __str__(self):
         return f'{self.seria}'
+
+class Place(models.Model):
+    id = models.AutoField(primary_key=True, db_column='PlaceID')
+    place = models.CharField(max_length=50, db_column='Место хранения',verbose_name='Места хранения')
+
+    class Meta:
+        db_table = 'Place'
+        verbose_name = 'Место хранения'
+        verbose_name_plural = 'Места хранения'
+
+    def __str__(self):
+        return f'{self.place}'

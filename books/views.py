@@ -1,20 +1,25 @@
 from django.http import HttpResponse, JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
-from django.template.loader import render_to_string
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
+from django.core.files.storage import FileSystemStorage
 from django.db.models import F, Q
 from django.shortcuts import render, get_object_or_404, redirect
-from django.core.files.storage import FileSystemStorage
-from .models import Book, Tag, BookTags, Author, Editor, Theme, Cover, Type, Format, Seria
-from django.views import View
-from django.views.generic import TemplateView, DetailView
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.forms import BaseModelForm
-from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
-import os
-from django.core.cache import cache
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView, DetailView
+from django.views.generic.edit import (
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+from django.views.generic.list import ListView
+from django.views import View
+from django.forms import BaseModelForm
+
+from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
+from .models import Book, Tag, BookTags, Author, Editor, Theme, Cover, Type, Format, Seria
+import os
 
 info={
      "menu": [
@@ -43,14 +48,8 @@ info={
                      "URL":"/books/reader/",
                      "URL_name": "reader",
                   },
-                  {
-                     "title": "Добавить книгу",
-                     "URL":"/books/add_book/",
-                     "URL_name": "add_book",
-                  },
-             ],
+         ],
     }
-
 
 class MenuMixin:
     """
@@ -126,6 +125,25 @@ class CatalogView(MenuMixin, ListView):
         context['menu'] = info['menu'] # Пример добавления статических данных в контекст
         return context
 
+
+class BookByThemeListView(MenuMixin, ListView):
+    model = Book
+    template_name = 'books/catalog.html'
+    context_object_name = 'books'
+    paginate_by = 30
+
+    def get_queryset(self):
+        slug = self.kwargs.get('slug')
+        theme = get_object_or_404(Theme, slug=slug)
+
+        return Book.objects.filter(theme=theme)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['theme'] = get_object_or_404(Theme, slug=self.kwargs.get('slug'))
+        return context
+
+
 def get_books_by_tag(request, tag_id):
 
     books = Book.objects.filter(tags__id=tag_id)
@@ -196,6 +214,7 @@ def get_control(request):
 class CategoryListView(MenuMixin, ListView):
     model = Theme
     template_name = "books/category_list.html"
+
 
 class BookByCategoryView(MenuMixin, ListView):
     model = Theme
@@ -271,6 +290,7 @@ class AddBookCreateView(MenuMixin, CreateView):
     template_name = 'books/add_book.html'
     success_url = reverse_lazy('catalog')
     redirect_field_name = 'next'
+
 
 class AddAuthorCreateView(MenuMixin, CreateView):
     model = Author

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, Format, Seria
+from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, Format, Seria, Place
 from django.contrib.admin import SimpleListFilter
 from mptt.admin import MPTTModelAdmin
 from django_mptt_admin.admin import DjangoMpttAdmin
@@ -62,3 +62,6 @@ class Format(admin.ModelAdmin):
 class Seria(admin.ModelAdmin):
     list_display = ('pk', 'seria')
 
+@admin.register(Place)
+class Place(admin.ModelAdmin):
+    list_display = ('pk', 'place')

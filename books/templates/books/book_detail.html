@@ -16,6 +16,10 @@
         <h6 class="card-title">Формат книги: {{ book.format }}</h6>
         <h6 class="card-title">Серия: {{ book.seria }}</h6>
         <h6 class="card-title">Тематика: {{ book.theme }}</h6>
+        <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-white">
+          <p class="card-text"><small class="text-muted">{{ book.theme }}</small></p>
+        </a>
+        <h6 class="card-title">Место хранения: {{ book.place }}</h6>
         <img src="{{book.images_path.url}}" width="200px">
         {% if book.file_path %}
               <div><a href="{{book.file_path.url}}"> {{ book.title }}</a></div>

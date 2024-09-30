@@ -118,6 +118,9 @@
       Новых запросов не будет.
     {% endcomment %}
     <p>Найдено книг:  {{ page_obj.paginator.count }}</p>
+    {% if user.is_authenticated and perms.books.delete_book %}
+        <a href="{% url 'add_book' %}" class="btn btn-dark mb-3">Добавить книгу</a>
+    {% endif %}
     {% cache 90 catalog_content page_obj.number sort order search_query %}
           {% for book in books %}
                 {% include "books/includes/book_preview.html" %}

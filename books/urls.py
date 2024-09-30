@@ -6,6 +6,7 @@ urlpatterns = [
     path('catalog/', views.CatalogView.as_view(), name = 'catalog'),
     path('category_list/', CategoryListView.as_view(), name = 'category_list'),
     path('category_list/<str:slug>/', BookByCategoryView.as_view(), name='book-by-category'),
+    path('categories/<slug:slug>/', views.BookByThemeListView.as_view(), name='get_books_by_theme'),
     path('tags/<int:tag_id>/', views.get_books_by_tag, name='get_books_by_tag'),
     path('<int:pk>/detail/', views.BookDetailView.as_view(), name='detail_book_by_id'),
     path('<int:pk>/detail/edit/', views.EditBookUpdateView.as_view(), name='edit_book'),

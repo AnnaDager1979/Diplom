@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, Format, Seria
+from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, Format, Seria, Place
 from django.core.exceptions import ValidationError
 import re
 
@@ -114,7 +114,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book  # модель с которой работаем форма
-        fields = ['title', 'author', 'editor', 'year', 'theme', 'tags','type','cover','format', 'seria','tom', 'pages', 'status', 'controler', 'review', 'images_path', 'file_path']  # поля, которые будут в форме и их порядок
+        fields = ['title', 'author', 'editor', 'year', 'theme', 'tags','type','cover','format', 'seria','tom', 'pages', 'status', 'controler', 'review', 'place', 'images_path', 'file_path']  # поля, которые будут в форме и их порядок
 
         # Виджеты для полей
         widgets =  {
