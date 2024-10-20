@@ -1,11 +1,11 @@
 <!-- Краткое представление карточки книги -->
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card mb-3; border-primary;" style="max-width: 360px;margin-bottom: 10px;">
   <div class="row g-0">
-    <div class="col-md-8">
+    <div class="col-md-12">
       {% if book.file_path %}
       <div class="card-body bg-warning">
       {% else%}
-      <div class="card-body bg-secondary">
+      <div class="card-body bg-info">
       {% endif %}
         <h4 class="card-title">{{ book.title }}</h4>
         <h5 class="card-title">Автор: {{ book.author }}</h5>
@@ -13,19 +13,28 @@
               <i class="bi bi-files"></i> "Электронная книга"
               <div><a href="{{book.file_path.url}}"> {{ book.title }}</a></div>
         {% endif %}
-        <p class="card-text">
+        <div>
+        <span class="card-text;">
           Теги:
             {% for tag in book.tags.all %}
-             <span class="badge bg-secondary">
+             <span class="badge bg-primary">
               <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
              </span>
             {% endfor %}
-        </p>
+        </span>
+        </div>
+        <div>
+        <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-white">
+          <span class="card-text"><small class="text-muted">{{ book.theme }}</small></span>
+        </a>
+        </div>
+        <div>
         {% if book.images_path %}
         <img src="{{book.images_path.url}}" width="100px">
         {% else %}
-        <p>Обложка отсутствует или не загрузилась</p>
+        <span>Обложка отсутствует или не загрузилась</span>
         {% endif %}
+        </div>
         <div>
             <i class="bi bi-clock-fill"></i> {{ book.year }}
         </div>
@@ -46,14 +55,15 @@
           <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
               Подробнее
           </a>
+        </div>
 
 
-        <div>
+          <div>
             {% if book.status %}
               <i class="bi bi-check-lg text-white">Прочтено</i>
             {% endif %}
-        </div>
+          </div>
       </div>
     </div>
-   </div>
   </div>
+</div>
