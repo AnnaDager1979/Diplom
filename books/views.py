@@ -5,6 +5,7 @@ from django.core.cache import cache
 from django.core.files.storage import FileSystemStorage
 from django.db.models import F, Q
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.context_processors import request
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, DetailView
@@ -18,7 +19,7 @@ from django.views import View
 from django.forms import BaseModelForm
 
 from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
-from .models import Book, Tag, BookTags, Author, Editor, Theme, Cover, Type, Format, Seria
+from .models import Book, Tag, BookTags, Favorite, Author, Editor, Theme, Cover, Type, Format, Seria
 import os
 
 info={
@@ -84,10 +85,10 @@ class PageNotFoundView(MenuMixin, TemplateView):
     template_name = "404.html"
 
 class CatalogView(MenuMixin, ListView):
-    model = Book  # Указываем модель, данные которой мы хотим отобразить
+    model = Book # Указываем модель, данные которой мы хотим отобразить
     template_name = 'books/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
-    context_object_name = 'books'  # Имя перемеCatalogView(MenuMixin, ListView):нной контекста, которую будем использовать в шаблоне
-    paginate_by = 4  # Количество объектов на странице
+    context_object_name = 'books' # Имя перемеCatalogView(MenuMixin, ListView):нной контекста, которую будем использовать в шаблоне
+    paginate_by = 6  # Количество объектов на странице
 
     # Метод для модификации начального запроса к БД
     def get_queryset(self):
@@ -123,6 +124,7 @@ class CatalogView(MenuMixin, ListView):
         context['search_query'] = self.request.GET.get('search_query', '')
         # Добавление статических данных в контекст, если это необходимо
         context['menu'] = info['menu'] # Пример добавления статических данных в контекст
+        context['favorite_books'] = Book.objects.filter(id__in = Favorite.objects.filter(user=self.request.user).values('book'))
         return context
 
 
@@ -243,11 +245,6 @@ class BookByCategoryView(MenuMixin, ListView):
                 for book in Book.objects.filter(theme=theme):
                     queryset |= Book.objects.filter(id=book.id)
 
-        for theme in Theme.objects.all():
-            if theme.parent in parent_list:
-                for book in Book.objects.filter(theme=theme):
-                    queryset |= Book.objects.filter(id=book.id)
-
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -326,9 +323,14 @@ class DeleteBookView(LoginRequiredMixin, MenuMixin, DeleteView):
     template_name = 'books/delete_book.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
     redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
 
-class UploadFileCreateView(MenuMixin, CreateView):
-    model = Seria
-    form_class = SeriaForm
-    template_name = 'books/add_seria.html'
-    success_url = reverse_lazy('add_book')
-    redirect_field_name = 'next'
+
+def get_favorite(request, book_id):
+    books = Book.objects.filter(id=book_id)
+
+    context = {
+        'books': books,
+        'menu': info['menu'],
+   }
+    return render(request, 'books/add_favorite.html', context)
+
+

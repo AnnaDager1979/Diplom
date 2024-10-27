@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Tag, BookTags, Author, Editor, Theme, Type, Cover, Format, Seria, Place
+from .models import Book, Tag, BookTags, Favorite, Author, Editor, Theme, Type, Cover, Format, Seria, Place
 from django.core.exceptions import ValidationError
 import re
 
@@ -202,6 +202,7 @@ class SeriaForm(forms.ModelForm):
     class Meta:
         model = Seria  # модель с которой работаем форма
         fields = ['seria']
+
 
 class UploadFileForm(forms.Form):
     # Здесь определяется поле для загрузки файла

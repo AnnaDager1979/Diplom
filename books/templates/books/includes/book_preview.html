@@ -11,14 +11,14 @@
         <h5 class="card-title">Автор: {{ book.author }}</h5>
         {% if book.file_path %}
               <i class="bi bi-files"></i> "Электронная книга"
-              <div><a href="{{book.file_path.url}}"> {{ book.title }}</a></div>
+              <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
         {% endif %}
         <div>
         <span class="card-text;">
           Теги:
             {% for tag in book.tags.all %}
              <span class="badge bg-primary">
-              <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
+                 <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
              </span>
             {% endfor %}
         </span>
@@ -55,12 +55,15 @@
           <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
               Подробнее
           </a>
-        </div>
+          <a href="{% url 'get_favorite' book_id=book.pk %}" class="btn btn-dark btn-sm ms-3"><i class="bi bi-heart-fill"></i></a>
+       </div>
 
-
-          <div>
+          <div class="d-flex justify-content-between align-items-center mt-2">
             {% if book.status %}
               <i class="bi bi-check-lg text-white">Прочтено</i>
+            {% endif %}
+            {% if book in favorite_books %}
+                   <i class="bi bi-heart-fill" style="color: #F00;"></i>
             {% endif %}
           </div>
       </div>

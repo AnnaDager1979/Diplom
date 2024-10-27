@@ -86,7 +86,7 @@
             <label class="form-check-label" for="sortYear">
               Году выпуска
             </label>
-          </div>-->
+          </div>
         </div>
         <!-- Радиокнопки для выбора направления сортировки
           order: порядок сортировки ('asc' для возрастания, 'desc' для убывания; по умолчанию 'desc'). -->
@@ -122,9 +122,13 @@
         <a href="{% url 'add_book' %}" class="btn btn-dark mb-3">Добавить книгу</a>
     {% endif %}
     {% cache 90 catalog_content page_obj.number sort order search_query %}
-          {% for book in books %}
-                {% include "books/includes/book_preview.html" %}
-          {% endfor %}
+          <div class="container">
+              <div class="row">
+                  {% for book in books %}
+                      {% include "books/includes/book_preview.html" %}
+                  {% endfor %}
+              </div>
+          </div>
     {% endcache %}
 </div>
 </div>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -32,7 +33,6 @@ class Book(models.Model):
     review = models.CharField(max_length=100, db_column='Рецензия', verbose_name='Рецензия')
     place = models.ForeignKey('Place', on_delete=models.CASCADE, db_column='PlaceID', null=True, verbose_name='Место хранения')
     tags = models.ManyToManyField('Tag', through='BookTags', related_name='books')
-    #readers = models.ManyToManyField('User', through='Favorite', related_name='books')
 
     class Meta:
         db_table = 'Books'  # имя таблицы в базе данных
@@ -76,13 +76,13 @@ class BookTags(models.Model):
         return f'Тег {self.tag.name} к книге {self.book.title}'
 
 
-# class Favorite(models.Model):
-#     id = models.AutoField(primary_key=True, db_column='id')
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='UserID')
-#     book = models.ForeignKey(Book, on_delete=models.CASCADE, db_column='BookID')
-#
-#     class Meta:
-#         unique_together = ('user', 'book')
+class Favorite(models.Model):
+     id = models.AutoField(primary_key=True, db_column='id')
+     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column='UserID')
+     book = models.ForeignKey(Book, on_delete=models.CASCADE, db_column='BookID')
+
+     class Meta:
+         unique_together = ('user', 'book')
 
 
 class Author(models.Model):

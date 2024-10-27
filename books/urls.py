@@ -18,4 +18,5 @@ urlpatterns = [
     path('add_author/', views.AddAuthorCreateView.as_view(), name='add_author'),
     path('add_editor/', views.AddEditorCreateView.as_view(), name='add_editor'),
     path('add_seria/', views.AddSeriaCreateView.as_view(), name='add_seria'),
+    path('add_favorite/<int:book_id>/', views.get_favorite, name='get_favorite'),
 ]

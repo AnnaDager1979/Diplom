@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load cache %}
 {% block content %}
-    <h1>Книжные серии</h1>
+   <h1>Книжные серии</h1>
    <div class="row">
     <div class="col-12">
     <form action="{% url 'series' %}" method="get" class="mb-5 mt-3">
@@ -21,7 +21,10 @@
                                     {% if book.seria == seria %}
                                     <li style="font-size:16px; font-weight: normal"">
                                        <div style="overflow: hidden;">
-                                            <div style="float: left; width: 380px; height: 25px; ">{{book}}</div>
+                                           <div style="float: left; width: 380px; height: 25px; ">
+                                               <div>{{book.title}}</div>
+                                               <div>Автор: {{book.author}}</div>
+                                           </div>
                                            <div style="float: left; width: 50px; height: 45px; ">
                                                   <img src="{{book.images_path.url}}" width="35px" height="45px">
 							                </div>
