@@ -1,3 +1,4 @@
+from django.db.transaction import commit
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.context_processors import request
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 from django.views.generic import TemplateView, DetailView
 from django.views.generic.edit import (
     CreateView,
@@ -16,9 +18,10 @@ from django.views.generic.edit import (
 )
 from django.views.generic.list import ListView
 from django.views import View
+from django.contrib.auth.models import User
 from django.forms import BaseModelForm
 
-from .forms import BookForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
+from .forms import BookForm, FavoriteForm, AuthorForm, EditorForm, SeriaForm, UploadFileForm
 from .models import Book, Tag, BookTags, Favorite, Author, Editor, Theme, Cover, Type, Format, Seria
 import os
 
@@ -324,13 +327,31 @@ class DeleteBookView(LoginRequiredMixin, MenuMixin, DeleteView):
     redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
 
 
-def get_favorite(request, book_id):
-    books = Book.objects.filter(id=book_id)
 
-    context = {
-        'books': books,
-        'menu': info['menu'],
-   }
-    return render(request, 'books/add_favorite.html', context)
+class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
+    model = Favorite
+    form_class = FavoriteForm
+    template_name = 'books/add_favorite.html'
+    success_url = reverse_lazy('catalog')
+    redirect_field_name = 'next'
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        self.id = Book.objects.get(id=self.kwargs['book_id']).id
+        queryset = Book.objects.filter(id=self.id)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       context['menu'] = info['menu'] # Пример добавления статических данных в контекст
+       context['bookid'] = Book.objects.get(id=self.kwargs['book_id']).id
+       context['book'] = Book.objects.all()
+       return context
+
+    def get_initial(self):
+        return {'user': self.request.user}
+
+
+
 
 

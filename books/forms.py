@@ -1,5 +1,9 @@
 from django import forms
+from django.template.context_processors import request
+
 from .models import Book, Tag, BookTags, Favorite, Author, Editor, Theme, Type, Cover, Format, Seria, Place
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 import re
 
@@ -90,7 +94,6 @@ class BookForm(forms.ModelForm):
     review = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 40}),
         label='Рецензия на книгу:',
-        ##validators=[CodeBlockValidator()]
     )
 
     images_path = forms.ImageField(
@@ -151,6 +154,14 @@ class BookForm(forms.ModelForm):
             instance.tags.add(tag)
 
         return instance
+
+
+class FavoriteForm(forms.ModelForm):
+
+    class Meta:
+       model = Favorite  # модель с которой работаем форма
+       fields = ['user', 'book']  # поля, которые будут в форме и их порядок
+       widgets ={'book': forms.HiddenInput(), 'user':forms.HiddenInput()}
 
 
 class AuthorForm(forms.ModelForm):

@@ -1,7 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Эта книга добавлена Вами в избранное:'</h1>
+<h1>Книга будет добавлена в избранное:</h1>
     {% for book in books %}
        {% include "books/includes/book_preview.html" %}
     {% endfor %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+<!--                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>-->
+                     {{ field }}
+                          {% if field.label == 'Book' %}
+                          <input type="hidden" name="book" value = '{{ bookid }}'/>
+                          {% endif %}
+                          {% if field.errors %}
+                          <div class="alert alert-danger mt-1">{{ field.errors.as_text }}</div>
+                          {% endif %}
+                </div>
+                {% endfor %}
+                <div class="mb-3">
+                    {% if form.non_field_errors %}
+                          <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-dark">Добавить в избранное</button>
+            </form>
+        <div class="d-flex justify-content-between align-items-center mt-3">
+   </div>
+</div>
 {% endblock %}
+
+
