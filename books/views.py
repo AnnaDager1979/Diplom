@@ -326,8 +326,6 @@ class DeleteBookView(LoginRequiredMixin, MenuMixin, DeleteView):
     template_name = 'books/delete_book.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
     redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
 
-
-
 class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
     model = Favorite
     form_class = FavoriteForm
@@ -352,6 +350,18 @@ class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
         return {'user': self.request.user}
 
 
+class DeleteFavoriteBookView(MenuMixin, ListView):
+    model = Favorite  # Указываем модель, с которой работает представление
+    success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного удаления карточки
+    template_name = 'books/delete_favorite.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
+    redirect_field_name = 'next'  # Имя параметр
 
-
+    def get_context_data(self, **kwargs):
+       context = super().get_context_data(**kwargs)
+       book = Book.objects.get(id=self.kwargs['book'])
+       message = "Книга удалена из избранного"
+       favorite_book=Favorite.objects.filter(book=book.id).filter(user=self.request.user)
+       favorite_book.delete()
+       context['message'] = message
+       return context
 
