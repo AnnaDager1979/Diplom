@@ -26,21 +26,21 @@ from .models import Book, Tag, BookTags, Favorite, Author, Editor, Theme, Cover,
 import os
 
 info={
-     "menu": [
+   "menu": [
                  {
                      "title": "Главная",
                      "URL":"/",
                      "URL_name":"index",
                   },
-                 {
-                     "title": "Тематический рубрикатор",
-                     "URL":"/books/category_list/",
-                     "URL_name": "category_list",
-                  },
-                 {
+                  {
                      "title": "Каталог",
                      "URL":"/books/catalog/",
                      "URL_name": "catalog",
+                  },
+                  {
+                     "title": "Тематический рубрикатор",
+                     "URL":"/books/category_list/",
+                     "URL_name": "category_list",
                   },
                   {
                      "title": "Серии книг",
@@ -53,13 +53,10 @@ info={
                      "URL_name": "reader",
                   },
          ],
-    }
+}
 
 class MenuMixin:
-    """
-    Класс-миксин для добавления меню в контекст шаблона
-    Добывает и кеширует books_count, menu
-    """
+
     timeout = 30
     def get_menu(self):
         menu = cache.get('menu')
@@ -88,12 +85,11 @@ class PageNotFoundView(MenuMixin, TemplateView):
     template_name = "404.html"
 
 class CatalogView(MenuMixin, ListView):
-    model = Book # Указываем модель, данные которой мы хотим отобразить
-    template_name = 'books/catalog.html'  # Путь к шаблону, который будет использоваться для отображения страницы
-    context_object_name = 'books' # Имя перемеCatalogView(MenuMixin, ListView):нной контекста, которую будем использовать в шаблоне
-    paginate_by = 6  # Количество объектов на странице
+    model = Book
+    template_name = 'books/catalog.html'
+    context_object_name = 'books'
+    paginate_by = 6
 
-    # Метод для модификации начального запроса к БД
     def get_queryset(self):
         # Получение параметров сортировки из GET-запроса
         sort = self.request.GET.get('sort', 'title')
@@ -125,9 +121,12 @@ class CatalogView(MenuMixin, ListView):
         context['sort'] = self.request.GET.get('sort', 'title')
         context['order'] = self.request.GET.get('order', 'asc')
         context['search_query'] = self.request.GET.get('search_query', '')
-        # Добавление статических данных в контекст, если это необходимо
         context['menu'] = info['menu'] # Пример добавления статических данных в контекст
-        context['favorite_books'] = Book.objects.filter(id__in = Favorite.objects.filter(user=self.request.user).values('book'))
+        try:
+            if self.request.user:
+                context['favorite_books'] = Book.objects.filter(id__in = Favorite.objects.filter(user=self.request.user).values('book'))
+        except:
+            0
         return context
 
 
@@ -153,7 +152,6 @@ def get_books_by_tag(request, tag_id):
 
     books = Book.objects.filter(tags__id=tag_id)
 
-    # подготавливаем контекст и отображаем шаблон
     context = {
         'books': books,
         'menu': info['menu'],
@@ -208,13 +206,23 @@ class SeriaView(MenuMixin, ListView):
         context['books'] = Book.objects.all()
         return context
 
-def get_control(request):
-    books = Book.objects.filter(controler=1)
-    context = {
-        "books": books,
-        'menu': info['menu'],
-    }
-    return render(request, 'books/to_read.html',context)
+
+class GetControl(ListView):
+    model = Book
+    template_name = 'books/to_read.html'
+    context_object_name = 'books'
+
+    def get_queryset(self):
+        queryset = Book.objects.filter(controler=1)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['books'] = Book.objects.filter(controler=1)
+        context['favorite_books'] = Book.objects.filter(controler=1).filter(id__in=Favorite.objects.filter(user=self.request.user).values('book'))
+        context['menu'] = info['menu']
+        return context
+
 
 class CategoryListView(MenuMixin, ListView):
     model = Theme
@@ -330,9 +338,9 @@ class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
     model = Favorite
     form_class = FavoriteForm
     template_name = 'books/add_favorite.html'
+    context_object_name = 'books'
     success_url = reverse_lazy('catalog')
     redirect_field_name = 'next'
-    context_object_name = 'books'
 
     def get_queryset(self):
         self.id = Book.objects.get(id=self.kwargs['book_id']).id

@@ -111,17 +111,15 @@
 </div>
 <div class="row">
     <div class="col-12">
-    <p>Здесь вы можете выбрать книги для чтения</p>
     {% comment %}
       Мы обращаемся к атрибуту paginator объекта page_obj, чтобы получить общее количество книг в каталоге.
       Они уже рассчитаны.
-      Новых запросов не будет.
     {% endcomment %}
     <p>Найдено книг:  {{ page_obj.paginator.count }}</p>
     {% if user.is_authenticated and perms.books.delete_book %}
         <a href="{% url 'add_book' %}" class="btn btn-dark mb-3">Добавить книгу</a>
     {% endif %}
-    {% cache 90 catalog_content page_obj.number sort order search_query %}
+    {% cache 5 catalog_content page_obj.number sort order search_query %}
           <div class="container">
               <div class="row">
                   {% for book in books %}

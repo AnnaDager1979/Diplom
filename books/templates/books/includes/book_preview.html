@@ -42,12 +42,9 @@
           {% if user.is_authenticated and perms.books.change_book %}
             <a href="{% url 'edit_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-pencil"></i></a>
           {% endif %}
-
           {% if user.is_authenticated and perms.books.delete_book %}
             <a href="{% url 'delete_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-trash"></i></a>
           {% endif %}
-        <!--    ТУТ 2 КНОПКИ. 1 видно на компьютерах, другую на телефонах.    -->
-          <!-- Кнопка для sm и меньше (только иконка) -->
           <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-block d-sm-none">
               <i class="bi bi-arrow-right"></i>
           </a>
@@ -55,10 +52,12 @@
           <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
               Подробнее
           </a>
-          {% if book in favorite_books %}
-          <a href="{% url 'delete_favorite' book.pk %}" class="btn btn-dark btn-sm ms-3"><i class="bi bi-circle"></i></a>
-          {% else %}
-          <a href="{% url 'get_favorite' book_id=book.pk %}" class="btn btn-dark btn-sm ms-3"><i class="bi bi-heart-fill"></i></a>
+          {% if user.is_authenticated %}
+            {% if book in favorite_books %}
+            <a href="{% url 'delete_favorite' book.pk %}" class="btn btn-dark btn-sm ms-3"><i class="bi bi-circle"></i></a>
+            {% else %}
+            <a href="{% url 'get_favorite' book_id=book.pk %}" class="btn btn-dark btn-sm ms-3"><i class="bi bi-heart-fill"></i></a>
+            {% endif %}
           {% endif %}
         </div>
 
