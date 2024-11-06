@@ -13,14 +13,21 @@
     <!-- Ссылки навигации -->
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        {% for item in menu %}
-          <li class="nav-item">
-            <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
-          </li>
-          {% if not forloop.last %}
-            <!-- В BS5 разделители в меню не являются общепринятыми, но если нужно, используйте дополнительный CSS или JS для стилизации -->
-          {% endif %}
-        {% endfor %}
+        {% if user.is_authenticated %}
+          {% for item in menu %}
+            <li class="nav-item">
+              <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
+            </li>
+          {% endfor %}
+        {% else %}
+          {% for item in menu %}
+            {% if item.URL_name != "reader" %}
+              <li class="nav-item">
+                <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
         <ul class="navbar-nav"> <!-- Элементы правой части без выравнивания по левому краю -->
         {% if user.is_authenticated %}
         <li class="nav-item">

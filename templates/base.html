@@ -66,6 +66,9 @@
 
     <script>
       {% block scripts %}
+        $(document).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
       {% endblock %}
     </script>
   </body>
