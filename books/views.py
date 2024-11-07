@@ -91,19 +91,16 @@ class CatalogView(MenuMixin, ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        # Получение параметров сортировки из GET-запроса
         sort = self.request.GET.get('sort', 'title')
         order = self.request.GET.get('order', 'asc')
         search_query = self.request.GET.get('search_query', '')
 
-        # Определение направления сортировки
         if order == 'asc':
             order_by = sort
         else:
             order_by = f'-{sort}'
 
-        # Фильтрация карточек по поисковому запросу и сортировка
-        if search_query:
+       if search_query:
             queryset = Book.objects.filter(
                 Q(title__iregex=search_query) |
                 Q(author__sirname__iregex=search_query) |
@@ -113,7 +110,6 @@ class CatalogView(MenuMixin, ListView):
             queryset = Book.objects.prefetch_related('tags').order_by(order_by)
         return queryset
 
-    # Метод для добавления дополнительного контекста
     def get_context_data(self, **kwargs):
         # Получение существующего контекста из базового класса
         context = super().get_context_data(**kwargs)
