@@ -100,7 +100,7 @@ class CatalogView(MenuMixin, ListView):
         else:
             order_by = f'-{sort}'
 
-       if search_query:
+        if search_query:
             queryset = Book.objects.filter(
                 Q(title__iregex=search_query) |
                 Q(author__sirname__iregex=search_query) |
@@ -167,7 +167,7 @@ class BookDetailView(MenuMixin, DetailView):
 
 
 class SeriaView(MenuMixin, ListView):
-    model = Book, Seria  # Указываем модель, данные которой мы хотим отобразить
+    model = Seria  # Указываем модель, данные которой мы хотим отобразить
     template_name = 'books/series.html'  # Путь к шаблону, который будет использоваться для отображения страницы
     context_object_name = 'series'
 
