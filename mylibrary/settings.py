@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'mptt',
     'books',
     'users',
-    'bootstrap5',
+    'bootstrap',
 ]
 
 MIDDLEWARE = [
