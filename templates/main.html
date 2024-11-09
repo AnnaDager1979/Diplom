@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Главная страница{% endblock %}
 {% block content %}
 <body>
     <div>
        <h1>Моя домашняя библиотека</h1>
     </div>
-    <div style="width: 1280px; height: 1200px; background-image: url('../books/static/books/images/Cover.jpg')">
+    <div style="width: 1280px; height: 1200px; background-image: url('{% static "books/images/Cover.jpg" %}')">
         <div><a style="color: yellow" href="https://book24.ru">Интернет-магазин Book24</a></div>
         <div><a style="color: yellow"href="https://www.bookvoed.ru">Интернет-магазин "Буквоед"</a></div>
         <div><a style="color: yellow"href="https://www.labirint.ru">Интернет-магазин "Лабиринт"</a></div>
