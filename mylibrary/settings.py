@@ -31,6 +31,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
+    'annadager1979-diplom-3386.twc1.net',
     '127.0.0.1',
     'localhost',]
 
