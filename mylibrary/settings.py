@@ -31,12 +31,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
+    'bookden.ru',
+    'www.bookden.ru',
     '127.0.0.1',
     'localhost',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://annadager1979-diplom-3386.twc1.net',
+    'https://bookden.ru',
+    'https://www.bookden.ru',
 ]
 
 if DEBUG:
