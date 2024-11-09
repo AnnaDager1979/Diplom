@@ -31,9 +31,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
-    'annadager1979-diplom-3386.twc1.net',
     '127.0.0.1',
-    'localhost'
+    'localhost',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
@@ -168,6 +167,7 @@ AUTHENTICATION_BACKENDS = [
 
 
 AUTH_USER_MODEL = 'users.User'
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
