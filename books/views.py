@@ -262,14 +262,10 @@ class BookByCategoryView(MenuMixin, ListView):
         return context
 
 def handle_uploaded_file(f):
-        # Создаем путь к файлу в директории uploads, имя файла берем из объекта f
         file_path = f'books/static/books/images/{f.name}'
 
-        # Создаем папку uploads, если ее нет
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
-
-        # Открываем файл для записи в бинарном режиме (wb+)
         with open(file_path, "wb+") as destination:
             for chunk in f.chunks():
                 destination.write(chunk)
