@@ -13,7 +13,7 @@ admin.site.index_title = 'Добро пожаловать в панель упр
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', cache_page(60 * 15)(views.IndexView.as_view()), name='index'),
+    path('', views.IndexView.as_view(), name='index'),
     path('books/',include('books.urls')),
     path('users/',include('users.urls', namespace='users')),
     path('<str:slug>/', BookByCategoryView.as_view(), name='book-by-category'),

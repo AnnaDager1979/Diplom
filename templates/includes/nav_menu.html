@@ -4,46 +4,54 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
   <div style="background-color: blue"; class="container-fluid">
-    <!-- Логотип и кнопка для мобильных версий -->
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Ссылки навигации -->
-    <div class="collapse navbar-collapse" id="navbarNav">
+   <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        {% if user.is_authenticated %}
-          {% for item in menu %}
-            <li class="nav-item">
-              <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
-            </li>
-          {% endfor %}
-        {% else %}
-          {% for item in menu %}
-            {% if item.URL_name != "reader" %}
-              <li class="nav-item">
-                <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-        <ul class="navbar-nav"> <!-- Элементы правой части без выравнивания по левому краю -->
-        {% if user.is_authenticated %}
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'users:profile' %}">{{ user.username }}!</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
-        </li>
-        {% endif %}
+         {% if user.is_superuser %}
+                {% for item in menu %}
+                    <li class="nav-item">
+                            <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
+                    </li>
+                {% endfor %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:profile' %}">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+                </li>
+         {% elif user.is_authenticated %}
+                {% for item in menu %}
+                      {% if item.URL_name != "reader" %}
+                            <li class="nav-item">
+                              <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
+                            </li>
+                      {% endif %}
+                {% endfor %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:profile' %}">{{ user.username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'users:logout' %}">Выйти</a>
+                </li>
+         {% else %}
+                {% for item in menu %}
+                      {% if item.URL_name != "reader" %}
+                            <li class="nav-item">
+                                <a style="color: white"; class="nav-link {% if forloop.first %}active{% endif %}" aria-current="page" href="{% url item.URL_name %}">{{ item.title }}</a>
+                            </li>
+                      {% endif %}
+                {% endfor %}
+                <li class="nav-item">
+                       <a class="nav-link" href="{% url 'users:login' %}">Войти</a>
+                </li>
+                <li class="nav-item">
+                       <a class="nav-link" href="{% url 'users:signup' %}">Регистрация</a>
+                </li>
+         {% endif %}
       </ul>
     </div>
   </div>
