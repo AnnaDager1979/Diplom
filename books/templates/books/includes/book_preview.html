@@ -1,75 +1,89 @@
-<!-- Краткое представление карточки книги -->
-<div class="card mb-3; border-primary;" style="max-width: 360px;margin-bottom: 10px;">
-  <div class="row g-0">
-    <div class="col-md-12">
-      {% if book.file_path %}
-      <div class="card-body bg-warning">
-      {% else%}
-      <div class="card-body bg-info">
-      {% endif %}
-        <h4 class="card-title">{{ book.title }}</h4>
-        <h5 class="card-title">Автор: {{ book.author }}</h5>
-        {% if book.file_path %}
-              <i class="bi bi-files"></i> "Электронная книга"
-              <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
-        {% endif %}
-        <div>
-        <span class="card-text;">
-          Теги:
-            {% for tag in book.tags.all %}
-             <span class="badge bg-primary">
-                 <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
-             </span>
-            {% endfor %}
-        </span>
-        </div>
-        <div>
-        <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-white">
-          <span class="card-text"><small class="text-muted">{{ book.theme }}</small></span>
-        </a>
-        </div>
-        <div>
-        {% if book.images_path %}
-        <img src="{{book.images_path.url}}" width="100px">
-        {% else %}
-        <span>Обложка отсутствует или не загрузилась</span>
-        {% endif %}
-        </div>
-        <div>
-            <i class="bi bi-clock-fill"></i> {{ book.year }}
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-2">
-          {% if user.is_authenticated and perms.books.change_book %}
-            <a href="{% url 'edit_book' book.pk %}" class="btn btn-dark ms-3" class="container" title="Редактировать карточку"><i class="bi bi-pencil"></i></a>
-          {% endif %}
-          {% if user.is_authenticated and perms.books.delete_book %}
-            <a href="{% url 'delete_book' book.pk %}" class="btn btn-dark ms-3" class="container" title="Удалить карточку"><i class="bi bi-trash"></i></a>
-          {% endif %}
-          <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-block d-sm-none">
-              <i class="bi bi-arrow-right"></i>
-          </a>
-          <!-- Кнопка для sm и больше (полный текст) -->
-          <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
-              Подробнее
-          </a>
-          {% if user.is_authenticated %}
-            {% if book in favorite_books %}
-            <a href="{% url 'delete_favorite' book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Удалить из избранного"><i class="bi bi-circle"></i></a>
+<div class="card mb3; border-primary;" style="max-width: 315px;margin-bottom: 10px;">
+    <div class="row g-0">
+        <div class="col-md-12">
+            {% if book.file_path %}
+            <div class="card-body bg-warning";>
             {% else %}
-            <a href="{% url 'get_favorite' book_id=book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Добавить в избранное"><i class="bi bi-heart-fill"></i></a>
+            <div class="card-body bg-info";>
             {% endif %}
-          {% endif %}
+                <div style="height: 430px;">
+                    <div style="height: 85px;">
+                         <h5 class="card-title">{{ book.title }}</h5>
+                         <h6 class="card-title">Автор: {{ book.author }}</h6>
+                    </div>
+                    <div style="height: 110px;">
+                        <div>
+                            <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-white">
+                                <span class="card-text"><small class="text-muted">Тема: {{ book.theme }}</small></span>
+                            </a>
+                        </div>
+                        <div>
+                          {% if book.images_path %}
+                          <img src="{{book.images_path.url}}" width="100px">
+                          {% else %}
+                          <span>Обложка отсутствует или не загрузилась</span>
+                          {% endif %}
+                        </div>
+                        <div>
+                           <i class="bi bi-clock-fill"></i> {{ book.year }}
+                        </div>
+                    <div style="height: 45px;">
+                           {% if book.file_path %}
+                                <i class="bi bi-files"></i> "Электронная книга"
+                                {% if user.is_superuser %}
+                                     <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
+                                {% endif%}
+                           {% else %}
+                              <i class="bi bi-book"></i> "Бумажное издание"
+                           {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2" style="height: 25px;">
+                            {% if user.is_authenticated and perms.books.change_book %}
+                                <a href="{% url 'edit_book' book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Редактировать карточку"><i class="bi bi-pencil"></i></a>
+                            {% endif %}
+                            {% if user.is_authenticated and perms.books.delete_book %}
+                                <a href="{% url 'delete_book' book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Удалить карточку"><i class="bi bi-trash"></i></a>
+                            {% endif %}
+                                <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-block d-sm-none">
+                                <i class="bi bi-arrow-right"></i>
+                                </a>
+                                <a href="{% url 'detail_book_by_id' pk=book.pk %}" class="btn btn-dark btn-sm ms-3 d-none d-sm-block">
+                                Подробнее</a>
+                            {% if user.is_authenticated %}
+                                {% if book in favorite_books %}
+                                    <a href="{% url 'delete_favorite' book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Удалить из избранного"><i class="bi bi-circle"></i></a>
+                                {% else %}
+                                    <a href="{% url 'get_favorite' book_id=book.pk %}" class="btn btn-dark btn-sm ms-3" class="container" title="Добавить в избранное"><i class="bi bi-heart-fill"></i></a>
+                                {% endif %}
+                            {% endif %}
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-2" style="height: 20px;">
+                              {% if book.status %}
+                                  {% if user.is_superuser %}
+                                       <i class="bi bi-check-lg text-white"> Прочтено</i>
+                                  {% endif %}
+                              {% else %}
+                                  {% if user.is_superuser %}
+                                        <i class="bi bi-hand-index">Прочитать!</i>
+                                  {% endif %}
+                              {% endif %}
+                              {% if book in favorite_books %}
+                                  <i class="bi bi-heart-fill" style="color: #F00;"></i>
+                              {% endif %}
+                    </div>
+                    <div style="height: 70px;">
+                            <span class="card-text;">
+                            Теги:
+                                {% for tag in book.tags.all %}
+                                   <span class="badge bg-primary">
+                                       <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
+                                   </span>
+                                {% endfor %}
+                            </span>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            {% if book.status %}
-              <i class="bi bi-check-lg text-white">Прочтено</i>
-            {% endif %}
-            {% if book in favorite_books %}
-                   <i class="bi bi-heart-fill" style="color: #F00;"></i>
-            {% endif %}
-          </div>
-      </div>
-    </div>
-  </div>
+   </div>
 </div>

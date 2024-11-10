@@ -68,7 +68,7 @@
     <div class="col-12">
     <form action="{% url 'catalog' %}" method="get" class="mb-5 mt-3">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Поиск по книгам" name="search_query" aria-label="Поиск по книгам">
+          <input type="text" class="form-control" placeholder="Поиск по наименованию книги или автору" name="search_query" aria-label="Поиск по книгам">
           <button class="btn btn-dark" type="submit">Поиск</button>
         </div>
 
@@ -122,9 +122,9 @@
     {% cache 5 catalog_content page_obj.number sort order search_query %}
           <div class="container">
               <div class="row">
-                  {% for book in books %}
-                      {% include "books/includes/book_preview.html" %}
-                  {% endfor %}
+                          {% for book in books %}
+                              {% include "books/includes/book_preview.html" %}
+                          {% endfor %}
               </div>
           </div>
     {% endcache %}

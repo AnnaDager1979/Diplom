@@ -97,6 +97,10 @@ class Author(models.Model):
         verbose_name_plural = 'Авторы'
 
     def __str__(self):
+        if (self.name == "."):
+            self.name = ""
+        if (self.fathername == "."):
+            self.fathername = ""
         return f'{self.sirname} {self.name} {self.fathername}'
 
 class Editor(models.Model):

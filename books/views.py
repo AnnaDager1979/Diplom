@@ -88,7 +88,7 @@ class CatalogView(MenuMixin, ListView):
     model = Book
     template_name = 'books/catalog.html'
     context_object_name = 'books'
-    paginate_by = 6
+    paginate_by = 12
 
     def get_queryset(self):
         sort = self.request.GET.get('sort', 'title')
