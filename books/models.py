@@ -30,7 +30,7 @@ class Book(models.Model):
     controler = models.BooleanField(default=0, choices=(map(lambda x: (bool(x[0]), x[1]), Controler.choices)), verbose_name='На контроле')
     images_path = models.ImageField(upload_to='books/images', blank=True)
     file_path = models.FileField(upload_to='books/e_books', blank=True)
-    review = models.CharField(max_length=100, db_column='Рецензия', verbose_name='Рецензия')
+    review = models.CharField(max_length=2000, db_column='Рецензия', verbose_name='Рецензия')
     place = models.ForeignKey('Place', on_delete=models.CASCADE, db_column='PlaceID', null=True, verbose_name='Место хранения')
     tags = models.ManyToManyField('Tag', through='BookTags', related_name='books')
 

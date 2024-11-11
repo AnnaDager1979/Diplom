@@ -6,45 +6,54 @@
         Детальное представление карточки
       </div>
       <div class="card-body">
-        <h4 class="card-title">{{ book.title }}</h4>
-        <h5 class="card-title">Автор: {{ book.author }}</h5>
-        <h6 class="card-title">Издательство: {{ book.editor }}</h6>
-        <h6 class="card-title">Год издания: {{ book.year }}</h6>
-        <h6 class="card-title">Тип книги: {{ book.type}}</h6>
-        <h6 class="card-title">Обложка: {{ book.cover }}</h6>
-        <h6 class="card-title">Количество страниц: {{ book.pages }}</h6>
-        <h6 class="card-title">Формат книги: {{ book.format }}</h6>
-        <h6 class="card-title">Серия: {{ book.seria }}</h6>
-        <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-blue">
-          <span class="card-text">Тематика: {{ book.theme }}</span>
-        </a>
-        <h6 class="card-title">Место хранения: {{ book.place }}</h6>
         <div>
-        <img src="{{book.images_path.url}}" width="200px">
-        {% if book.file_path %}
-              <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
-        {% endif %}
+            <div style="float: left; width: 50%;">
+                <h4 class="card-title">{{ book.title }}</h4>
+                <h5 class="card-title">Автор: {{ book.author }}</h5>
+                <h6 class="card-title">Издательство: {{ book.editor }}</h6>
+                <h6 class="card-title">Год издания: {{ book.year }}</h6>
+                <h6 class="card-title">Тип книги: {{ book.type}}</h6>
+                <h6 class="card-title">Обложка: {{ book.cover }}</h6>
+                <h6 class="card-title">Количество страниц: {{ book.pages }}</h6>
+                <h6 class="card-title">Формат книги: {{ book.format }}</h6>
+                <h6 class="card-title">Серия: {{ book.seria }}</h6>
+                <a href="{% url 'get_books_by_theme' slug=book.theme.slug %}" class="text-blue">
+                    <span class="card-text">Тематика: {{ book.theme }}</span>
+                </a>
+                <h6 class="card-title">Место хранения: {{ book.place }}</h6>
+                <div>
+                    <img src="{{book.images_path.url}}" width="200px">
+                    {% if book.file_path %}
+                          <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
+                    {% endif %}
+                </div>
+                <div>
+                    <span class="card-text;">
+                      Теги:
+                        {% for tag in book.tags.all %}
+                           <span class="badge bg-primary">
+                               <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
+                           </span>
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="{% url 'catalog' %}" class="btn btn-dark">Вернуться к каталогу</a>
+                    <div>
+                        {% if user.is_authenticated and perms.books.change_book %}
+                            <a href="{% url 'edit_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-pencil"></i></a>
+                        {% endif %}
+                        {% if user.is_authenticated and perms.books.delete_book %}
+                            <a href="{% url 'delete_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-trash"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h4>Рецензия на книгу:</h4>
+                <h6>{{book.review}}></h6>
+            </div>
         </div>
-        <div>
-        <span class="card-text;">
-          Теги:
-            {% for tag in book.tags.all %}
-             <span class="badge bg-primary">
-                 <a href="{% url 'get_books_by_tag' tag_id=tag.pk %}" class="text-white">{{ tag.name }}</a>
-             </span>
-            {% endfor %}
-        </span>
-        </div>
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <a href="{% url 'catalog' %}" class="btn btn-dark">Вернуться к каталогу</a>
-          <div>
-            {% if user.is_authenticated and perms.books.change_book %}
-              <a href="{% url 'edit_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-pencil"></i></a>
-            {% endif %}
-            {% if user.is_authenticated and perms.books.delete_book %}
-              <a href="{% url 'delete_book' book.pk %}" class="btn btn-dark ms-3"><i class="bi bi-trash"></i></a>
-            {% endif %}
-          </div>
         </div>
       </div>
     </div>
