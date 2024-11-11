@@ -31,7 +31,7 @@
                            {% if book.file_path %}
                                 <i class="bi bi-files"></i> "Электронная книга"
                                 {% if user.is_superuser %}
-                                     <div><a href="{{book.file_path.url}}">{{ book.title }}</a></div>
+                                     <div><a href="{{book.file_path.url}}">Содержимое книги</a></div>
                                 {% endif%}
                            {% else %}
                               <i class="bi bi-book"></i> "Бумажное издание"

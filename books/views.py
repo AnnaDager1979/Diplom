@@ -155,35 +155,31 @@ def get_books_by_tag(request, tag_id):
     return render(request, 'books/catalog.html', context)
 
 class BookDetailView(MenuMixin, DetailView):
-    model = Book  # Указываем, что моделью для этого представления является Card
-    template_name = 'books/book_detail.html'  # Указываем путь к шаблону для детального отображения карточки
-    context_object_name = 'book'  # Переопределяем имя переменной в контексте шаблона
+    model = Book
+    template_name = 'books/book_detail.html'
+    context_object_name = 'book'
 
-    # Метод для обновления счетчика просмотров при каждом отображении детальной страницы карточки
+
     def get_object(self, queryset=None):
-        # Получаем объект с учетом переданных в URL параметров (в данном случае, pk или id карточки)
         obj = super().get_object(queryset=queryset)
         return obj
 
 
 class SeriaView(MenuMixin, ListView):
-    model = Seria  # Указываем модель, данные которой мы хотим отобразить
-    template_name = 'books/series.html'  # Путь к шаблону, который будет использоваться для отображения страницы
+    model = Seria
+    template_name = 'books/series.html'
     context_object_name = 'series'
 
     def get_queryset(self):
-        # Получение параметров сортировки из GET-запроса
         sort = self.request.GET.get('sort', 'seria')
         order = self.request.GET.get('order', 'asc')
         search_query = self.request.GET.get('search_query', '')
 
-        # Определение направления сортировки
         if order == 'asc':
             order_by = sort
         else:
             order_by = f'-{sort}'
 
-        # Фильтрация карточек по поисковому запросу и сортировка
         if search_query:
             queryset = Seria.objects.filter(seria__iregex=search_query).order_by(order_by)
         else:
@@ -191,13 +187,10 @@ class SeriaView(MenuMixin, ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
-        # Получение существующего контекста из базового класса
         context = super().get_context_data(**kwargs)
-        # Добавление дополнительных данных в контекст
         context['sort'] = self.request.GET.get('sort', 'seria')
         context['order'] = self.request.GET.get('order', 'asc')
         context['search_query'] = self.request.GET.get('search_query', '')
-        # Добавление статических данных в контекст, если это необходимо
         context['menu'] = info['menu'] # Пример добавления статических данных в контекст
         context['books'] = Book.objects.all()
         return context
@@ -321,10 +314,10 @@ class EditBookUpdateView(LoginRequiredMixin, MenuMixin, UpdateView):
     redirect_field_name = 'next'
 
 class DeleteBookView(LoginRequiredMixin, MenuMixin, DeleteView):
-    model = Book  # Указываем модель, с которой работает представление
-    success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного удаления карточки
-    template_name = 'books/delete_book.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
-    redirect_field_name = 'next'  # Имя параметра URL, используемого для перенаправления после успешного входа в систему
+    model = Book
+    success_url = reverse_lazy('catalog')
+    template_name = 'books/delete_book.html'
+    redirect_field_name = 'next'
 
 class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
     model = Favorite
@@ -341,7 +334,7 @@ class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
 
     def get_context_data(self, **kwargs):
        context = super().get_context_data(**kwargs)
-       context['menu'] = info['menu'] # Пример добавления статических данных в контекст
+       context['menu'] = info['menu']
        context['bookid'] = Book.objects.get(id=self.kwargs['book_id']).id
        context['book'] = Book.objects.all()
        return context
@@ -351,10 +344,10 @@ class AddFavoriteBookCreateView(MenuMixin, CreateView, ListView):
 
 
 class DeleteFavoriteBookView(MenuMixin, ListView):
-    model = Favorite  # Указываем модель, с которой работает представление
-    success_url = reverse_lazy('catalog')  # URL для перенаправления после успешного удаления карточки
-    template_name = 'books/delete_favorite.html'  # Указываем шаблон, который будет использоваться для отображения формы подтверждения удаления
-    redirect_field_name = 'next'  # Имя параметр
+    model = Favorite
+    success_url = reverse_lazy('catalog')
+    template_name = 'books/delete_favorite.html'
+    redirect_field_name = 'next'
 
     def get_context_data(self, **kwargs):
        context = super().get_context_data(**kwargs)
